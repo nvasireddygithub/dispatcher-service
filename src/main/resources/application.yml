@@ -9,6 +9,8 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
+      username: user
+      password: password
       request-connect-timeout: 5000 # 5s
       request-read-timeout: 5000 # 5s
       fail-fast: false # In production, set to true
@@ -16,7 +18,9 @@ spring:
         max-attempts: 6
         initial-interval: 1000 # 1s
         max-interval: 2000 # 2s
-        multiplier: 1.1  
+        multiplier: 1.1
+    bus:
+      enabled: false  
     function:
       definition: pack|label
     stream:
@@ -32,3 +36,32 @@ spring:
     username: user
     password: password
     connection-timeout: 5s
+    
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]" 
+ 
+info:
+  system: Polar Bookshop
+         
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bindings, configprops, env, functions, health, heapdump, info, loggers, mappings, prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true        
+  metrics:
+    tags:
+      application: ${spring.application.name}
